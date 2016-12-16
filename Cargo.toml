@@ -1,0 +1,7 @@
+[package]
+name = "work"
+version = "0.1.0"
+authors = ["meng.fanjun <600913@gmail.com>"]
+
+[dependencies]
+rouille = "*"
