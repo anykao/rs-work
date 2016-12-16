@@ -5,3 +5,5 @@ authors = ["meng.fanjun <600913@gmail.com>"]
 
 [dependencies]
 rouille = "*"
+rustc-serialize = "*"
+

@@ -1,9 +1,8 @@
-import * as React from "react";
-import * as ReactDOM from "react-dom";
+import dva from 'dva';
+import count from './models/count';
+import router from './router';
 
-import { Hello } from "./components/Hello";
-
-ReactDOM.render(
-    <Hello compiler="typescript" framework="React" />,
-    document.getElementById("root")
-);
+const app = dva();
+app.model(count);
+app.router(router);
+app.start('#root');

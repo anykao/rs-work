@@ -1,8 +1,16 @@
 #[macro_use]
 extern crate rouille;
+extern crate rustc_serialize;
+
+#[derive(RustcEncodable)]
+struct MyStruct {
+    field1: String,
+    field2: i32,
+}
 
 fn main() {
-    rouille::start_server("localhost:8000", move |request| {
+    println!("Now listening on localhost:7777");
+    rouille::start_server("localhost:7777", move |request| {
         {
             let response = rouille::match_assets(&request, ".");
 
@@ -16,6 +24,10 @@ fn main() {
             rouille::Response::text("hello world")
         },
 
+        (GET) (/mystruct) => {
+            rouille::Response::json(&MyStruct { field1: "hello".to_owned(), field2: 5 })
+        },
+
         (GET) (/{name: String}) => {
             rouille::Response::text(format!("hello, {}", name))
         },
@@ -23,7 +35,6 @@ fn main() {
          _ => rouille::Response::empty_404()
 
         )
-
     })
 
 }
