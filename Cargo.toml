@@ -15,6 +15,8 @@ serde_derive = "0.8"
 serde_json = "0.8"
 clippy = "*"
 clap = "*"
+rocket = "0.1.4"
+rocket_codegen = "0.1.4"
 
 [dependencies.extra]
 git = "https://github.com/redox-os/libextra.git"
