@@ -9,7 +9,10 @@
 // `Cargo.toml`!
 #[macro_use]
 extern crate error_chain;
+#[macro_use]
+extern crate log;
 extern crate reqwest;
+extern crate env_logger;
 extern crate dotenv;
 
 
@@ -22,10 +25,12 @@ mod errors {
 }
 
 use dotenv::dotenv;
+use std::collections::HashMap;
 use errors::*;
+use reqwest::header::{Headers, Authorization, Basic};
+use std::env;
 
 fn main() {
-    dotenv.Ok();
     if let Err(ref e) = run() {
         use ::std::io::Write;
         let stderr = &mut ::std::io::stderr();
@@ -56,11 +61,28 @@ fn main() {
 // `errors` module. It is a typedef of the standard `Result` type
 // for which the error type is always our own `Error`.
 fn run() -> Result<()> {
-    use std::fs::File;
+    dotenv().ok();
+    env_logger::init().unwrap();
+    let api_key = env::var("SENDGRID_API_KEY").chain_err(|| "unable to get SENDGRID_API_KEY");
+    debug!(api_key);
+    let mut map = HashMap::new();
+    map.insert("lang", "rust");
+    map.insert("body", "json");
+
+    let client = reqwest::Client::new().unwrap();
+    let res = client.post("https://api.sendgrid.com/v3/mail/send")
+        .header(Authorization(Basic { password: Some(api_key) }))
+        .json(&map)
+        .send()
+        .chain_err(|| "unable to send body")?;
 
 
-    // This operation will fail
-    File::open("tretrete").chain_err(|| "unable to open tretrete file")?;
+
+    // use std::fs::File;
+
+
+    /// / This operation will fail
+    /// File::open("tretrete").chain_err(|| "unable to open tretrete file")?;
 
     Ok(())
 }
