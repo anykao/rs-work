@@ -6,22 +6,22 @@ extern crate serde_derive;
 
 use std::collections::HashMap;
 
+pub type SGMap = HashMap<String, String>;
+
 #[derive(Serialize, Deserialize, Debut)]
 pub struct SGMailV3 {
-    From             &Email,
+    From             Email,
     Subject          String ,
     Personalizations Vec<Personalization>,
-    Content          Vec<&Content>,
-    Attachments      Vec<&Attachment>,
-    TemplateID       String,
+    Content          Vec<Content>,
     Sections         Hashmap<String, String>,
-    Headers          Hashmap<String, String>,
+    Headers          Option<SGMap>,
     Categories       Vec<String>,
-    CustomArgs       Hashmap<String, String>,
-    SendAt           i32,
+    CustomArgs       Option<SGMap>,
+    SendAt           Option<u64>,
     BatchID          String,
     IPPoolID         String,
-    ReplyTo          *Email,
+    ReplyTo          Email,
 }
 
 #[derive(Serialize, Deserialize, Debut)]

@@ -27,7 +27,7 @@ mod errors {
 use dotenv::dotenv;
 use std::collections::HashMap;
 use errors::*;
-use reqwest::header::{Headers, Authorization, Basic};
+use reqwest::header::{Authorization, Bearer};
 use std::env;
 
 fn main() {
@@ -66,12 +66,14 @@ fn run() -> Result<()> {
     let api_key = env::var("SENDGRID_API_KEY").chain_err(|| "unable to get SENDGRID_API_KEY");
     debug!(api_key);
     let mut map = HashMap::new();
-    map.insert("lang", "rust");
-    map.insert("body", "json");
+    map.insert("to", "rust");
+    map.insert("from", "json");
+    map.insert("Subject", "json");
+    map.insert("content", "json");
 
     let client = reqwest::Client::new().unwrap();
     let res = client.post("https://api.sendgrid.com/v3/mail/send")
-        .header(Authorization(Basic { password: Some(api_key) }))
+        .header(Authorization(Bearer { token: api_key.to_owned() }))
         .json(&map)
         .send()
         .chain_err(|| "unable to send body")?;
