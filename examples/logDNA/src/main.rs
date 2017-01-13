@@ -14,6 +14,8 @@ extern crate reqwest;
 extern crate pretty_env_logger;
 #[macro_use]
 extern crate dotenv;
+extern crate logDNA;
+extern crate serde_json;
 
 
 // We'll put our errors in an `errors` module, and other modules in
@@ -30,8 +32,9 @@ use errors::*;
 use reqwest::header::{Authorization, Basic};
 use reqwest::Url;
 use std::env;
+use logDNA::Lines;
 
-const IngestBaseURL: &'static str = "https://logs.logdna.com/logs/ingest";
+static IngestBaseURL: &'static str = "https://logs.logdna.com/logs/ingest";
 
 fn main() {
     if let Err(ref e) = run() {
@@ -73,17 +76,16 @@ fn run() -> Result<()> {
     url.query_pairs_mut()
         .clear()
         .append_pair("hostname", "EXAMPLE_HOST")
-        .append_pair("mac", "1")
-        .append_pair("ip", "1")
+        .append_pair("mac", "C0:FF:EE:C0:FF:EE")
+        .append_pair("ip", "10.0.1.101")
         .append_pair("now", "1464041337000");
     debug!("url {}", url);
     let client = reqwest::Client::new().unwrap();
-    let mut line = HashMap::new();
-    line.insert("timestamp", 1464041337000);
-    line.insert("line", "this is an awesome log statement");
-    line.insert("file", "example.log");
-    let mut lines = HashMap::new();
-    lines.insert("lines", vec![line]);
+    let mut lines = Lines::new();
+    lines.add_line("safd".to_owned(), "sbaa.txt".to_owned());
+
+    let serialized = serde_json::to_string_pretty(&lines).unwrap();
+    debug!("serialized = {}", serialized);
     let res = client.post(url)
         .header(Authorization(Basic {
             username: api_key,
