@@ -1,5 +1,5 @@
 [package]
-name = "sendgrid"
+name = "logDNA"
 version = "0.1.0"
 authors = ["meng.fanjun <xmeng.fanjun@contract.isid.co.jp>"]
 
@@ -9,7 +9,8 @@ serde = "0.8"
 serde_json = "0.8"
 reqwest = "*"
 dotenv = "*"
+dotenv_macros = "*"
 error-chain = "*"
-env_logger = "*"
+pretty_env_logger = "*"
 log = "*"
 
