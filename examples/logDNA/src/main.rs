@@ -82,7 +82,7 @@ fn run() -> Result<()> {
     debug!("url {}", url);
     let client = reqwest::Client::new().unwrap();
     let mut lines = Lines::new();
-    lines.add_line("safd".to_owned(), "sbaa.txt".to_owned());
+    lines.add_line("safd", "sbaa.txt");
 
     let serialized = serde_json::to_string_pretty(&lines).unwrap();
     debug!("serialized = {}", serialized);
